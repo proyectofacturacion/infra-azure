@@ -1,7 +1,7 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "rg-cicd-terraform-app-proyectofacturacion" # Reemplazar por proyectofacturacion
-    storage_account_name = "tfstateproyectofacturacion"                # Reemplazar por proyectofacturacion
+    resource_group_name  = "rg-cicd-terraform-app-projfactu" # Reemplazar por projfactu
+    storage_account_name = "tfstateprojfactu"                # Reemplazar por projfactu
     container_name       = "tfstate"
     key                  = "qa/terraform.tfstate"
   }

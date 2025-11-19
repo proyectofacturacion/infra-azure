@@ -1,5 +1,5 @@
 locals {
-  idapp = "proyectofacturacion" # proyectofacturacion
+  idapp = "projfactu" # projfactu
 }
 
 terraform {
