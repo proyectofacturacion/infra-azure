@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "rg-cicd-terraform-app-projfactu"
     storage_account_name = "tfstateprojfactu"
     container_name       = "tfstate"
-    key                  = "qa.tfstate"
+    key                  = "dev.tfstate"
   }
 }

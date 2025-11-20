@@ -1,5 +1,5 @@
 locals {
-  idapp = "projfactu" # projfactu
+  idapp = "projfactu"
 }
 
 terraform {
@@ -13,5 +13,5 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "212505e5-da0e-4f00-850b-9d48a4f06e50" # Id de suscripción
+  subscription_id = "212505e5-da0e-4f00-850b-9d48a4f06e50"
 }

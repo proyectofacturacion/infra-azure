@@ -13,7 +13,7 @@ on:
           - qa
           - prd
       accion:
-        description: "Selecciona la acción de Terraform"
+        description: "Acción de Terraform"
         required: true
         default: "plan"
         type: choice
@@ -30,12 +30,10 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Configuración de ambiente (copiar tfvars y backend)
-        if: ${{ github.event.inputs.ambiente != 'dev' }}
+      - name: Copiar backend y tfvars del ambiente
         run: |
-          echo "Copiando variables y backend para ${{ github.event.inputs.ambiente }}"
-          cp envs/${{ github.event.inputs.ambiente }}/variables.tf ./variables.tf
           cp envs/${{ github.event.inputs.ambiente }}/backend.tf ./backend.tf
+          cp envs/${{ github.event.inputs.ambiente }}/terraform.tfvars ./terraform.tfvars
 
       - name: Login en Azure
         uses: azure/login@v2
@@ -50,19 +48,18 @@ jobs:
       - name: Terraform Init
         run: terraform init
         env:
-          ARM_CLIENT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+          ARM_CLIENT_ID:       ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+          ARM_CLIENT_SECRET:   ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
           ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+          ARM_TENANT_ID:       ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
 
-      - name: Ejecutar Terraform (según acción seleccionada)
+      - name: Ejecutar Terraform
         run: |
           case "${{ github.event.inputs.accion }}" in
             "plan")
               terraform plan
               ;;
             "plan+apply")
-              terraform plan
               terraform apply -auto-approve
               ;;
             "destroy")
@@ -70,7 +67,7 @@ jobs:
               ;;
           esac
         env:
-          ARM_CLIENT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
-          ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+          ARM_CLIENT_ID:       ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+          ARM_CLIENT_SECRET:   ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
           ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
-          ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+          ARM_TENANT_ID:       ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
